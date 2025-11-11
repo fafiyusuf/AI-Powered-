@@ -11,8 +11,8 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
   const allowedExtensions = ["pdf", "txt", "docx", "md","pptx","ppt"]; // study files
   const extname = allowedExtensions.includes(path.extname(file.originalname).slice(1).toLowerCase());
   const mimetype = allowedExtensions.some(ext => file.mimetype.includes(ext));
-
-  if (extname && mimetype) {
+  console.log(extname, mimetype);
+  if (extname || mimetype) {
     cb(null, true);
   } else {
     cb(new CustomError("File type not supported", 400));
