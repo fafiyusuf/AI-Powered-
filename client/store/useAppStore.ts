@@ -123,9 +123,7 @@ updateNote: async (id: string, updates: Partial<Note>) => {
       body: JSON.stringify(updates),
     })
     set((state) => ({
-      notes: state.notes.map((note) =>
-        note.id === id ? res.data : note
-      ),
+      notes: state.notes.map((note) => (note.id === id ? res.data : note)),
     }))
   } catch (err) {
     console.error("Failed to update note:", err)
@@ -134,17 +132,30 @@ updateNote: async (id: string, updates: Partial<Note>) => {
 
 deleteNote: async (id: string) => {
   const prevNotes = get().notes
-  set({ notes: prevNotes.filter((note) => note.id !== id) }) // optimistic UI
+  set({ notes: prevNotes.filter((note) => note.id !== id) })
   try {
     await api(`/api/notes/${id}`, { method: "DELETE" })
   } catch (err) {
     console.error("Failed to delete note:", err)
-    set({ notes: prevNotes }) // rollback if failed
+    set({ notes: prevNotes })
   }
 },
-  getNotesBySubject: (subject: string) => {
-    return get().notes.filter((note) => note.subject.toLowerCase() === subject.toLowerCase())
-  },
+
+getNotesBySubject: (subject: string) => {
+  return get().notes.filter(
+    (note) => note.subject.toLowerCase() === subject.toLowerCase()
+  )
+},
+
+loadNotes: async () => {
+  try {
+    const res = await api<{ success: boolean; data: Note[] }>("/api/notes")
+    set({ notes: res.data })
+  } catch (err) {
+    console.error("Failed to load notes:", err)
+  }
+},
+
 
   // Flashcard actions
   addFlashcard: (flashcard: Flashcard) => {
