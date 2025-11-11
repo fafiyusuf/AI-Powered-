@@ -40,6 +40,18 @@ enum Role {
   ADMIN
 }
 
+model File {
+  id        String   @id @default(cuid())
+  filename  String
+  mimetype  String
+  size      Int
+  url       String
+  uploadedBy User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Note {
   id          String   @id @default(cuid())
   title       String
@@ -109,16 +121,4 @@ model StudySession {
   duration  Int    // in minutes
   subject   String
   createdAt DateTime @default(now())
-}
-
-model File {
-  id        String   @id @default(cuid())
-  filename  String
-  mimetype  String
-  size      Int
-  url       String
-  uploadedBy User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
