@@ -3,9 +3,10 @@ import express from "express";
 import cors from "cors";
 
 import dotenv from "dotenv";
+import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./modules/auth/auth.route";
 import fileRoutes from "./modules/file/file.route";
-import { errorHandler } from "./middlewares/errorHandler";
+import flashcardRoutes from "./modules/flashcards/flashcard.route";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/file", fileRoutes);
+app.use("/api/flashcards", flashcardRoutes);
 
 
 
